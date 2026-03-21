@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+## 📱 Real-Time Tracking App (React Native - Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is the mobile frontend of the Real-Time Location Sharing & Navigation System, built using React Native with Expo. The app enables real-time communication between a Dispatcher (User A) and a Driver (User B).
 
-## Get started
+User A tracks live location on a map
+User B navigates to a destination and shares GPS updates
 
-1. Install dependencies
+# 🚀 Features
 
-   ```bash
-   npm install
-   ```
+# 🔐 Authentication
 
-2. Start the app
+Register & Login
+Token-based authentication (Laravel API)
+Role-based access:
+Dispatcher (User A)
+Driver (User B)
+🧭 Dispatcher (User A)
+Search and set destination
+View live map with:
+Driver’s current location
+Destination marker
+Real-time updates without refresh
+🚗 Driver (User B)
+Receive destination instantly
+Open navigation in:
+Google Maps (Android)
+Apple Maps (iOS)
+Share live GPS location every few seconds
 
-   ```bash
-   npx expo start
-   ```
+# 🗺️ Map Integration
 
-In the output, you'll find options to open the app in a
+Built using react-native-maps
+Real-time marker updates
+Smooth tracking experience
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+# 🏗️ Tech Stack
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## React Native (Expo)
 
-## Get a fresh project
+Axios (API requests)
+React Navigation
+react-native-maps
+Expo Location API
 
-When you're ready, run:
+## 📂 Project Structure
 
-```bash
-npm run reset-project
-```
+app/ # React Native (Expo)
+│ ├── components/
+│ ├
+│ ├── services/ # API (Axios setup)
+│ └── context/
+── types/
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+│
 
-## Learn more
+## ⚙️ Installation & Setup
 
-To learn more about developing your project with Expo, look at the following resources:
+# 1️⃣ Clone the Repository
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+git clone https://github.com/phoenix-da-phenom/tracking-app_frontend.git
+cd your-repo

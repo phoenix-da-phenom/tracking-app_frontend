@@ -1,6 +1,7 @@
 
 import * as SecureStore from 'expo-secure-store';
 import React, { createContext, ReactNode, useEffect, useState } from "react";
+import axiosInstance from '../service/axiosInstance';
 type AuthContextType = {
   userToken: string | null;
   loading: boolean;
@@ -31,11 +32,18 @@ export const AuthProvider = ({ children }: Props) => {
     loadToken();
   }, []);
   const login = async (token: string) => {
+
     try {
+      const response = await axiosInstance.post("/login", {
+      email: "test@example.com",
+      password: "123456",
+    });
+
+    console.log(response.data);
       await SecureStore.setItemAsync("userToken", token);
       setUserToken(token);
     } catch (error) {
-      console.error(error);
+       console.log(error.response?.data || error.message);
     }
   };
   const logout = async () => {
