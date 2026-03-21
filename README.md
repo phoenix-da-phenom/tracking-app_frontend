@@ -59,3 +59,13 @@ app/ # React Native (Expo)
 
 git clone https://github.com/phoenix-da-phenom/tracking-app_frontend.git
 cd your-repo
+
+# 2️⃣ Install dependencies
+
+npm install
+
+## 3️⃣ Install required packages
+
+npm install axios react-native-maps
+npx expo install expo-location expo-linking
+npm install expo-secure-store
