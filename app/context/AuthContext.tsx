@@ -1,11 +1,12 @@
 
+import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import axiosInstance from '../service/axiosInstance';
 type AuthContextType = {
   userToken: string | null;
   loading: boolean;
-  login: (token: string) => Promise<void>;
+  login: (email:string, password:string) => Promise<void>;
   logout: () => Promise<void>;
 };
 type Props = {
@@ -31,19 +32,24 @@ export const AuthProvider = ({ children }: Props) => {
     };
     loadToken();
   }, []);
-  const login = async (token: string) => {
+  const login = async (email:string , password:string) => {
 
     try {
       const response = await axiosInstance.post("/login", {
-      email: "test@example.com",
-      password: "123456",
+      email,
+      password,
     });
 
     console.log(response.data);
+    const token = response.data.token;
       await SecureStore.setItemAsync("userToken", token);
       setUserToken(token);
-    } catch (error) {
-       console.log(error.response?.data || error.message);
+    } catch (error ) {
+       if (axios.isAxiosError(error)) {
+      console.log(error.response?.data || error.message);
+    } else {
+      console.log("Unexpected error:", error);
+    }
     }
   };
   const logout = async () => {

@@ -1,28 +1,33 @@
 // component/LoginForm.jsx
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { AuthContext } from "../context/AuthContext";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const {login} = useContext(AuthContext)
 
   const handleLogin = () => {
     if (!email || !password) {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
+
+    login(email,password)
     // Replace with real auth logic later
     Alert.alert("Login Successful", `Welcome ${email.split("@")[0]}!`);
   };
