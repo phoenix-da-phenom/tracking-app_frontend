@@ -2,18 +2,19 @@
 import { Link } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { Picker } from "@react-native-picker/picker";
+import axiosInstance from "../service/axiosInstance";
 
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
@@ -21,11 +22,28 @@ const RegisterForm = () => {
   const [selected, setSelected] = useState("");
   const [userName, setUserName] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
+
+    try{
+        const response = await axiosInstance.post('/register', {
+          email,
+          password,
+          role: selected,
+          name:userName,
+          
+        })
+     const {token, user} = response.data;
+     console.log("the token is ", token, "this is user", user)
+
+    }catch(error){
+console.log(` the error is ${error}`)
+
+    }
+
     // Replace with real auth logic later
     Alert.alert("Login Successful", `Welcome ${email.split("@")[0]}!`);
   };
