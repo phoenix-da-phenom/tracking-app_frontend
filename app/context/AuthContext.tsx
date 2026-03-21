@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: Props) => {
     });
 
     console.log(response.data);
-    const token = response.data.token;
+    const {token, user} = response.data;
       await SecureStore.setItemAsync("userToken", token);
       setUserToken(token);
     } catch (error ) {
