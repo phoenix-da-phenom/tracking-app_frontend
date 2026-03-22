@@ -1,7 +1,7 @@
 
 import LoginForm from '@/components/LoginForm';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-
+import { StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 export default function login() {
