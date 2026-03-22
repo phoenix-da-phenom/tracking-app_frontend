@@ -1,6 +1,6 @@
 
+import RegisterForm from '@/components/RegisterForm';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-import RegisterForm from '../components/RegisterForm';
 
 
 

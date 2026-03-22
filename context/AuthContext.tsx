@@ -1,8 +1,8 @@
 
+import axiosInstance from '@/service/axiosInstance';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import axiosInstance from '../service/axiosInstance';
 type AuthContextType = {
   userToken: string | null;
   loading: boolean;

@@ -1,7 +1,7 @@
 
+import LoginForm from '@/components/LoginForm';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
-import LoginForm from '../components/LoginForm';
-// import LoginForm from './component/LoginForm';   
+
 
 
 export default function login() {
