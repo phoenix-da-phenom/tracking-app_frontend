@@ -28,8 +28,7 @@ const LoginForm = () => {
     }
 
     login(email,password)
-    // Replace with real auth logic later
-    Alert.alert("Login Successful", `Welcome ${email.split("@")[0]}!`);
+   
   };
 
   return (

@@ -2,6 +2,7 @@ import axiosInstance from '@/service/axiosInstance';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 type AuthContextType = {
   userToken: string | null;
@@ -53,7 +54,8 @@ export const AuthProvider = ({ children }: Props) => {
 
       await SecureStore.setItemAsync('userToken', token);
       setUserToken(token);
-
+ // Replace with real auth logic later
+    Alert.alert( `Welcome ${email.split("@")[0]}!`);
       return { success: true };
     } catch (error) {
       let errorMessage = 'Something went wrong. Please try again.';
@@ -71,7 +73,9 @@ export const AuthProvider = ({ children }: Props) => {
         }
       }
 
-      console.log('Login failed:', errorMessage);
+    Alert.alert("'Login failed:'",  errorMessage);
+
+   
       return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
