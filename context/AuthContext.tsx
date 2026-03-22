@@ -1,67 +1,94 @@
-
 import axiosInstance from '@/service/axiosInstance';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import React, { createContext, ReactNode, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
+
 type AuthContextType = {
   userToken: string | null;
-  loading: boolean;
-  login: (email:string, password:string) => Promise<void>;
+  isLoading: boolean;           // renamed for clarity
+  login: (email: string, password: string) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
   logout: () => Promise<void>;
 };
+
 type Props = {
   children: ReactNode;
 };
+
 export const AuthContext = createContext<AuthContextType>(
-  {} as AuthContextType,
+  {} as AuthContextType
 );
 
 export const AuthProvider = ({ children }: Props) => {
   const [userToken, setUserToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Load token on mount
   useEffect(() => {
     const loadToken = async () => {
       try {
-        const token = await SecureStore.getItemAsync("userToken");
+        const token = await SecureStore.getItemAsync('userToken');
         setUserToken(token);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error('Failed to load token:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
     loadToken();
   }, []);
-  const login = async (email:string , password:string) => {
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true); // global loading (optional)
 
     try {
-      const response = await axiosInstance.post("/login", {
-      email,
-      password,
-    });
+      const response = await axiosInstance.post('/login', {
+        email,
+        password,
+      });
 
-    console.log(response.data);
-    const {token, user} = response.data;
-      await SecureStore.setItemAsync("userToken", token);
+      const { token } = response.data; // adjust according to your real response
+
+      await SecureStore.setItemAsync('userToken', token);
       setUserToken(token);
-    } catch (error ) {
-       if (axios.isAxiosError(error)) {
-      console.log(error.response?.data || error.message);
-    } else {
-      console.log("Unexpected error:", error);
-    }
+
+      return { success: true };
+    } catch (error) {
+      let errorMessage = 'Something went wrong. Please try again.';
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const serverMsg = error.response?.data?.message || error.response?.data?.error;
+
+        if (status === 401 || status === 400) {
+          errorMessage = serverMsg || 'Incorrect email or password';
+        } else if (status === 429) {
+          errorMessage = 'Too many attempts. Try again later.';
+        } else if (!error.response) {
+          errorMessage = 'Network error. Check your connection.';
+        }
+      }
+
+      console.log('Login failed:', errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setIsLoading(false);
     }
   };
+
   const logout = async () => {
     try {
       await SecureStore.deleteItemAsync('userToken');
       setUserToken(null);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error('Logout failed:', err);
     }
   };
+
   return (
-    <AuthContext.Provider value={{ userToken, loading, login, logout }}>
+    <AuthContext.Provider value={{ userToken, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
