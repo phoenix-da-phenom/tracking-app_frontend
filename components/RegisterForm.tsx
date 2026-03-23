@@ -1,5 +1,5 @@
 // component/LoginForm.jsx
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -15,19 +15,25 @@ import {
 
 import axiosInstance from "@/service/axiosInstance";
 import { Picker } from "@react-native-picker/picker";
+import Toast from "react-native-toast-message";
 
 const RegisterForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selected, setSelected] = useState("");
   const [userName, setUserName] = useState("");
+  const router = useRouter();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
-
+          Toast.show({
+            type: "error",
+            text1: "Error",
+            text2: "Please fill in all fields",
+          });
+          return;
+        }
+    
     try{
         const response = await axiosInstance.post('/register', {
           email,
@@ -36,8 +42,10 @@ const RegisterForm = () => {
           name:userName,
           
         })
-     const {token, user} = response.data;
-     console.log("the token is ", token, "this is user", user)
+     const {token} = response.data;
+      router.replace("/dashboard");
+    
+     console.log("the token is ", token)
 
     }catch(error){
 console.log(` the error is ${error}`)

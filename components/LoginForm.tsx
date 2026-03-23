@@ -1,10 +1,9 @@
-// component/LoginForm.jsx
-import { Link } from "expo-router";
-import React, { useContext, useState } from "react";
-
+// component/LoginForm.tsx
 import { AuthContext } from "@/context/AuthContext";
+
+import { Link, useRouter } from "expo-router";
+import React, { useContext, useState } from "react";
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -14,24 +13,45 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const {login} = useContext(AuthContext)
+  const { login, isLoading } = useContext(AuthContext);
 
-  const handleLogin = () => {
+  const router = useRouter();
+  const handleLogin = async () => {
+
+    
+
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Please fill in all fields",
+      });
       return;
     }
 
-    login(email,password)
+    const result = await login(email, password);
 
-  
-
-   
+    if (result.success) {
+      Toast.show({
+        type: "success",
+        text1: "Login Successful 🎉",
+        text2: `Welcome ${email.split("@")[0]}`,
+      });
+        router.replace("/dashboard");
+    
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Login Failed",
+        text2: result.error || "Something went wrong",
+      });
+    }
   };
 
   return (
@@ -41,14 +61,12 @@ const LoginForm = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       <ScrollView
-        keyboardShouldPersistTaps="handled" // lets you tap outside to dismiss keyboard
+        keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.innerContainer}>
           <Text style={styles.title}>Login</Text>
-
-        
 
           <TextInput
             style={styles.input}
@@ -75,50 +93,40 @@ const LoginForm = () => {
             style={styles.button}
             onPress={handleLogin}
             activeOpacity={0.8}
+            disabled={isLoading}
           >
-            <Text style={styles.buttonText}>Login</Text>
-
-              
+            <Text style={styles.buttonText}>
+              {isLoading ? "Logging in..." : "Login"}
+            </Text>
           </TouchableOpacity>
-              <View style={styles.linkContainer}>
-                      <Text style={styles.linkText}>
-                        I don't have  an account!{" "}
-                        <Link href="/register" style={styles.linkHighlight}>
-                        Register
-                        </Link>
-                      </Text>
-                    </View>
+
+          <View style={styles.linkContainer}>
+            <Text style={styles.linkText}>
+              I don't have an account!{" "}
+              <Link href="/register" style={styles.linkHighlight}>
+                Register
+              </Link>
+            </Text>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
 
+export default LoginForm;
+
 const styles = StyleSheet.create({
-    linkContainer: {
-  marginTop: 24,
-  alignItems: 'center',
-},
-
-linkText: {
-  fontSize: 15,
-  color: '#6b7280', // subtle gray
-},
-
-linkHighlight: {
-  color: '#3b82f6', // same as button
-  fontWeight: '600',
-},
   keyboardAvoidingView: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: "center",
   },
   innerContainer: {
     paddingHorizontal: 32,
     paddingVertical: 90,
-  },
-  scrollContent: {
-    flexGrow: 1, // ← crucial
-    justifyContent: "center", // keep centered when content is short
   },
   title: {
     fontSize: 34,
@@ -155,6 +163,16 @@ linkHighlight: {
     fontSize: 18,
     fontWeight: "600",
   },
+  linkContainer: {
+    marginTop: 24,
+    alignItems: "center",
+  },
+  linkText: {
+    fontSize: 15,
+    color: "#6b7280",
+  },
+  linkHighlight: {
+    color: "#3b82f6",
+    fontWeight: "600",
+  },
 });
-
-export default LoginForm;
