@@ -8,6 +8,12 @@
     "scheme": "trackingapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
+    👉 ADD IT RIGHT HERE 👇
+    "extra": {
+      "API_URL": "http://192.168.1.5:8000/api"
+    },
+
     "ios": {
       "supportsTablet": true
     },

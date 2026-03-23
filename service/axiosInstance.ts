@@ -1,7 +1,9 @@
 import axios from "axios";
+import Constants from 'expo-constants';
 
+const API_URL = Constants.expoConfig?.extra?.API_URL;
 const axiosInstance = axios.create({
-  baseURL: "http://192.168.1.119:8000/api/v1",
+  baseURL: `${API_URL}/api/v1`,
   timeout: 10000,
 });
 
