@@ -41,47 +41,47 @@ export const AuthProvider = ({ children }: Props) => {
     loadToken();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true); // global loading (optional)
+const login = async (email: string, password: string) => {
+  setIsLoading(true);
 
-    try {
-      const response = await axiosInstance.post('/login', {
-        email,
-        password,
-      });
+  try {
+    const response = await axiosInstance.post('/login', {
+      email,
+      password,
+    });
 
-      const { token } = response.data; // adjust according to your real response
+    const { token } = response.data;
 
-      await SecureStore.setItemAsync('userToken', token);
-      setUserToken(token);
- // Replace with real auth logic later
-    Alert.alert( `Welcome ${email.split("@")[0]}!`);
-      return { success: true };
-    } catch (error) {
-      let errorMessage = 'Something went wrong. Please try again.';
+    await SecureStore.setItemAsync('userToken', token);
+    setUserToken(token);
 
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        const serverMsg = error.response?.data?.message || error.response?.data?.error;
+    Alert.alert("Welcome", email.split("@")[0]);
 
-        if (status === 401 || status === 400) {
-          errorMessage = serverMsg || 'Incorrect email or password';
-        } else if (status === 429) {
-          errorMessage = 'Too many attempts. Try again later.';
-        } else if (!error.response) {
-          errorMessage = 'Network error. Check your connection.';
-        }
+    return { success: true };
+  } catch (error) {
+    let errorMessage = 'Something went wrong. Please try again.';
+
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      const serverMsg =
+        error.response?.data?.message || error.response?.data?.error;
+
+      if (status === 401 || status === 400) {
+        errorMessage = serverMsg || 'Incorrect email or password';
+      } else if (status === 429) {
+        errorMessage = 'Too many attempts. Try again later.';
+      } else if (!error.response) {
+        errorMessage = 'Network error. Check your connection.';
       }
-
-    Alert.alert("'Login failed:'",  errorMessage);
-
-   
-      return { success: false, error: errorMessage };
-    } finally {
-      setIsLoading(false);
     }
-  };
 
+    Alert.alert("Login failed", errorMessage);
+
+    return { success: false, error: errorMessage };
+  } finally {
+    setIsLoading(false);
+  }
+};
   const logout = async () => {
     try {
       await SecureStore.deleteItemAsync('userToken');
