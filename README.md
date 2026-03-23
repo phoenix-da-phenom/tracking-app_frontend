@@ -69,3 +69,4 @@ npm install
 npm install axios react-native-maps
 npx expo install expo-location expo-linking
 npm install expo-secure-store
+npm install react-native-maps expo-location
