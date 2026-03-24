@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 
-const LoginForm = () => {
+const loginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -114,7 +114,7 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default loginForm;
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

@@ -1,5 +1,5 @@
 
-import LoginForm from '@/components/LoginForm';
+import LoginForm from "@/components/loginForm";
 import { StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

@@ -16,7 +16,7 @@ import {
 import axiosInstance from "@/service/axiosInstance";
 import { Picker } from "@react-native-picker/picker";
 
-const RegisterForm = () => {
+const registerForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selected, setSelected] = useState("");
@@ -245,4 +245,4 @@ linkHighlight: {
   },
 });
 
-export default RegisterForm;
+export default registerForm;

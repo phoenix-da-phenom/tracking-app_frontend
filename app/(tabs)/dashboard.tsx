@@ -13,7 +13,9 @@ export default function Dashboard() {
         alignItems: 'center',
       }}
     >
-      <Text>Dashboard</Text>
+       <Text>Welcome  [name]</Text> 
+
+    <Text>Helkkkkkkkooooooooooooooooo</Text>
 
       <TouchableOpacity
         onPress={logout}
