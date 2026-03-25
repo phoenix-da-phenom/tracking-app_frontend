@@ -10,6 +10,8 @@ import { io, Socket } from 'socket.io-client';
 const socket: Socket = io('https://your-backend.com'); // ← change to your real backend URL
 
 export default function LiveMapScreen() {
+
+  
   // Extract query params
   const { destination, lat: latStr, lng: lngStr } = useLocalSearchParams<{
     destination?: string;

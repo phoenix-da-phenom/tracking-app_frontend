@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
   bottomContainer: {
     position: "absolute",
-    bottom: 120,
+    bottom: 100,
     left: 15,
     right: 15,
   },

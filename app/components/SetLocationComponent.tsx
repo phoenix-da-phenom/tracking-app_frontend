@@ -1,12 +1,13 @@
 import { AuthContext } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { TextInput as PaperInput } from "react-native-paper";
 
@@ -14,6 +15,38 @@ export default function SetLocationComponent (){
   const { logout } = useContext(AuthContext);
    const [currentLocation, setCurrentLocation] = useState("");
    const [searchLocation, setSearchLocation] = useState("");
+const router = useRouter();
+  const handleSubmit = async () => {
+  try {
+    console.log(currentLocation);
+
+    const response = await fetch('/destination', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        location: currentLocation,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong');
+    }
+
+    console.log('Success:', data);
+
+    // redirect after success
+    router.replace('/map');
+
+  } catch (error: any) {
+    // redirect after success
+    router.replace('/map');
+    console.error('Error:', error.message);
+  }
+};
  
     return (
         <View style={styles.content}>
@@ -58,13 +91,7 @@ export default function SetLocationComponent (){
                 {/* Set Location Button */}
                 <TouchableOpacity
                   style={styles.setButton}
-                  onPress={() =>
-                    console.log(
-                      "Current:",
-                      currentLocation,
-                      "Destination:",
-                      searchLocation,
-                    )
+                  onPress={() =>handleSubmit    
                   }
                 >
                   <Text style={styles.setButtonText}>Set Destination</Text>

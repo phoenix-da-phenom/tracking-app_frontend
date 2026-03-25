@@ -1,38 +1,61 @@
-
 import { AuthContext } from "@/context/AuthContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
+  Animated,
   KeyboardAvoidingView,
+  PanResponder,
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchLocationComponent from "../components/SearchLocationComponent";
 import SetLocationComponent from "../components/SetLocationComponent";
+
 export default function Dashboard() {
   const { logout } = useContext(AuthContext);
   const [currentLocation, setCurrentLocation] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
+
+  const pan = useRef(new Animated.ValueXY()).current;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          { dx: pan.x, dy: pan.y }, // tracks movement
+        ],
+        { useNativeDriver: false },
+      ),
+      onPanResponderRelease: (e, gesture) => {
+        // You can check gesture.moveX / moveY for drop logic
+        console.log("Dropped at: ", gesture.moveX, gesture.moveY);
+        // Optional: reset position
+        Animated.spring(pan, {
+          toValue: { x: 0, y: 0 },
+          useNativeDriver: false,
+        }).start();
+      },
+    }),
+  ).current;
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-
       >
-        <View >
-          <Text style={styles.headerText} >Driver Dashboard </Text>
+        <View>
+          <Text style={styles.headerText}>Dispatcher Dashboard </Text>
         </View>
         <View style={styles.dashboardComponent}>
-  <SetLocationComponent/>
-      <SearchLocationComponent/>
-
+          <SetLocationComponent />
+          <SearchLocationComponent />
         </View>
-    
 
         {/* Floating Logout Button */}
         <TouchableOpacity style={styles.logoutButton} onPress={logout}>
@@ -44,13 +67,10 @@ export default function Dashboard() {
 }
 
 const styles = StyleSheet.create({
-  dashboardComponent:{
-    flex:1,
-    flexDirection:'column',
-    gap:20,
-
-
-    
+  dashboardComponent: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 20,
   },
   container: {
     flex: 1,
@@ -115,12 +135,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  headerText:{
-    fontSize:30,
-    fontWeight:'bold',
-    textAlign:"center",
-    paddingVertical:30,
-
-  }
-
+  headerText: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    paddingVertical: 30,
+  },
 });
