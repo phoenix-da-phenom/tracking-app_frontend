@@ -2,13 +2,16 @@ import { AuthContext } from "@/context/AuthContext";
 import React, { useContext, useRef, useState } from "react";
 import {
   Animated,
+  Keyboard,
   KeyboardAvoidingView,
   PanResponder,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  TouchableWithoutFeedback,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SearchLocationComponent from "../components/SearchLocationComponent";
@@ -44,25 +47,37 @@ export default function Dashboard() {
   ).current;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+  <SafeAreaView style={styles.container}>
+  <KeyboardAvoidingView
+    style={{ flex: 1 }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+  >
+    {/* Dismiss keyboard when tapping outside */}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
       >
         <View>
-          <Text style={styles.headerText}>Dispatcher Dashboard </Text>
+          <Text style={styles.headerText}>Dispatcher Dashboard</Text>
         </View>
+
         <View style={styles.dashboardComponent}>
           <SetLocationComponent />
           <SearchLocationComponent />
         </View>
+      </ScrollView>
 
-        {/* Floating Logout Button */}
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    </TouchableWithoutFeedback>
+
+    {/* Floating Logout Button */}
+    <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+      <Text style={styles.logoutButtonText}>Logout</Text>
+    </TouchableOpacity>
+
+  </KeyboardAvoidingView>
+</SafeAreaView>
   );
 }
 

@@ -1,33 +1,44 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 export default function SearchLocationComponent() {
   const [query, setQuery] = useState("");
 
   return (
     <SafeAreaView style={styles.container}>
-      
-      {/* Title */}
-      <View>
-        <Text style={styles.driverText}>Search Driver Location</Text>
-      </View>
-
-      {/* Bottom Search Bar */}
-      <View style={styles.bottomContainer}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="search" size={22} color="#333" />
-          <TextInput
-            style={styles.input}
-            placeholder="Where are you going?"
-            placeholderTextColor="#888"
-            value={query}
-            onChangeText={setQuery}
-          />
-          <Ionicons name="location-outline" size={22} color="#007AFF" />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        {/* Title */}
+        <View>
+          <Text style={styles.driverText}>Search Driver Location</Text>
         </View>
-      </View>
 
+        {/* Bottom Search Bar */}
+        <View style={styles.bottomContainer}>
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={22} color="#333" />
+            <TextInput
+              style={styles.input}
+              placeholder="Where are you going?"
+              placeholderTextColor="#888"
+              value={query}
+              onChangeText={setQuery}
+            />
+            <Ionicons name="location-outline" size={22} color="#007AFF" />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -76,6 +87,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginHorizontal: 10,
   },
-
-
 });
